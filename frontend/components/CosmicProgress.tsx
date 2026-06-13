@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useMemo } from "react"
 
 // Section detection patterns
 const SECTIONS = [
@@ -43,11 +43,11 @@ export function CosmicProgress({ tokenCount, maxTokens, streamingText, streamDon
   const pct = Math.min(Math.round((tokenCount / maxTokens) * 100), 99)
   const displayPct = streamDone ? 100 : Math.max(pct, 1)
 
-  const theme = system === "vedic"
+  const theme = useMemo(() => system === "vedic"
     ? { hue: 40, ring: "rgba(245,158,11,0.12)", glow: "245,158,11", label: "Kundli Shanti" }
     : system === "tropical"
     ? { hue: 240, ring: "rgba(99,102,241,0.12)", glow: "99,102,241", label: "Cosmic Geometry" }
-    : { hue: 0, ring: "rgba(239,68,68,0.12)", glow: "239,68,68", label: "Element Balance" }
+    : { hue: 0, ring: "rgba(239,68,68,0.12)", glow: "239,68,68", label: "Element Balance" }, [system])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -151,7 +151,7 @@ export function CosmicProgress({ tokenCount, maxTokens, streamingText, streamDon
 
     anim = requestAnimationFrame(draw)
     return () => { cancelAnimationFrame(anim); window.removeEventListener("resize", resize) }
-  }, [streamDone, theme])
+  }, [streamDone])
 
   return (
     <div className="w-full space-y-4">
