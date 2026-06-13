@@ -6,6 +6,7 @@ import { LangProvider, useLang } from "@/lib/lang"
 import { Sparkles, Globe } from "lucide-react"
 import { Footer } from "@/components/Footer"
 import { BackToTop } from "@/components/BackToTop"
+import { MiniTOC } from "@/components/MiniTOC"
 import { ToastProvider } from "@/components/Toast"
 import "./globals.css"
 
@@ -121,6 +122,7 @@ export default function RootLayout({
           <main className="max-w-6xl mx-auto relative z-10">
             {children}
           </main>
+          <MiniTOC />
           <BackToTop />
           <Footer />
           {/* Mouse glow tracker */}

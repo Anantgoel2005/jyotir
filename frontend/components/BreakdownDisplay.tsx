@@ -11,7 +11,6 @@ import { Cosmogram } from "@/components/Cosmogram"
 import { BaziPentagon } from "@/components/BaziPentagon"
 import { ReadingMeta } from "@/components/ReadingMeta"
 import { ErrorBoundary } from "@/components/ErrorBoundary"
-import { MiniTOC } from "@/components/MiniTOC"
 
 // ── Badge color maps ──────────────────────────────
 const PLANET_COLORS: Record<string, string> = {
@@ -293,10 +292,11 @@ export function BreakdownDisplay({ chart }: Props) {
         <div className="section-spiritual mb-3">
           <h3 className="text-xs font-semibold text-amber-400/70 uppercase tracking-widest">✦ Detailed Reading ✦</h3>
         </div>
+        <div data-breakdown-text={chart.breakdown || ""}>
         <RichBreakdown text={chart.breakdown} />
+        </div>
       </div>
     </section>
-    <MiniTOC text={chart.breakdown || ""} />
     </ErrorBoundary>
   )
 }

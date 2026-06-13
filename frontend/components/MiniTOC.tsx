@@ -17,9 +17,7 @@ function extractSections(text: string): { id: string; title: string; level: numb
   return sections
 }
 
-interface Props { text: string }
-
-export function MiniTOC({ text }: Props) {
+export function MiniTOC() {
   const sections = extractSections(text)
   const [active, setActive] = useState(0)
   const [visible, setVisible] = useState(false)
