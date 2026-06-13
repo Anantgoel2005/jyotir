@@ -180,7 +180,6 @@ export function Cosmogram({ planets }: Props) {
 
           return (
             <g key={p.name}>
-              <title>{p.name} in {p.sign} · House {p.house || "?"} · {Math.floor(p.fullDegree || 0)}°{p.isRetro === "true" ? " · Retrograde" : ""}</title>
               <circle cx={px} cy={py} r={10} fill={color} opacity="0.1" filter="url(#softNeon)" />
               <circle cx={px} cy={py} r={7} fill="rgba(10,10,30,0.9)" stroke={color} strokeWidth="1.5" filter="url(#neonGlow)" />
               <circle cx={px} cy={py} r={2.5} fill={color} opacity="0.9" />
