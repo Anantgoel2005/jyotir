@@ -5,7 +5,7 @@ import { BirthData, Chart } from "./types"
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "/api"
 
 export async function submitBirthData(data: BirthData): Promise<{ chart_id: string; status: string }> {
-  const res = await fetch(`${API_BASE}/chart`, {
+  const res = await fetch(`${API_BASE}/api/chart`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
@@ -18,7 +18,7 @@ export async function submitBirthData(data: BirthData): Promise<{ chart_id: stri
 }
 
 export async function fetchChart(chartId: string): Promise<Chart> {
-  const res = await fetch(`${API_BASE}/chart/${chartId}`)
+  const res = await fetch(`${API_BASE}/api/chart/${chartId}`)
   if (!res.ok) throw new Error("Chart not found")
   return res.json()
 }
@@ -33,6 +33,6 @@ export async function pollChartUntilReady(chartId: string, intervalMs = 2000, ma
 }
 
 export async function deleteChart(chartId: string): Promise<void> {
-  const res = await fetch(`${API_BASE}/chart/${chartId}`, { method: "DELETE" })
+  const res = await fetch(`${API_BASE}/api/chart/${chartId}`, { method: "DELETE" })
   if (!res.ok) throw new Error("Failed to delete chart")
 }
