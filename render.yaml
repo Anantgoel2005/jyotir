@@ -1,0 +1,52 @@
+# Render Blueprint — Jyotir AI Astrology Platform
+# Deploy: push to GitHub, connect repo in Render Dashboard
+# Or use: https://render.com/deploy?repo=YOUR_REPO_URL
+
+services:
+  # ── Backend API (FastAPI) ──────────────────────────
+  - type: web
+    name: jyotir-api
+    runtime: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    rootDir: backend
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: jyotir-db
+          property: connectionString
+      - key: ASTROLOGY_API_KEY
+        sync: false
+      - key: DEEPSEEK_API_KEY
+        sync: false
+      - key: CORS_ORIGINS
+        value: '["https://jyotir-web.onrender.com","http://localhost:3000"]'
+      - key: PYTHON_VERSION
+        value: "3.11.15"
+
+  # ── Frontend (Next.js) ─────────────────────────────
+  - type: web
+    name: jyotir-web
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    rootDir: frontend
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        fromService:
+          name: jyotir-api
+          type: web
+          property: url
+
+databases:
+  - name: jyotir-db
+    plan: free
+    region: oregon

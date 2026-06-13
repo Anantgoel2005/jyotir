@@ -30,5 +30,3 @@ out/
 # Logs
 *.log
 
-# Deploy
-render.yaml
