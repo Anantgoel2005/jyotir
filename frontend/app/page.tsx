@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react"
 import { SystemSelector } from "@/components/SystemSelector"
 import { BirthDataForm } from "@/components/BirthDataForm"
 import { BreakdownDisplay } from "@/components/BreakdownDisplay"
+import { CosmicProgress } from "@/components/CosmicProgress"
 
 import { ChatPanel } from "@/components/ChatPanel"
 import { Chart } from "@/lib/types"
