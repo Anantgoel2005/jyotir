@@ -49,6 +49,12 @@ app.include_router(chart.router, prefix="/api", tags=["chart"])
 app.include_router(chat.router, prefix="/api", tags=["chat"])
 
 
+
+
+@app.get("/")
+async def root():
+    return {"status": "ok", "app": "Jyotir", "docs": "/docs"}
+
 @app.get("/api/health")
 async def health():
     return {"status": "ok", "app": "Jyotir", "version": "0.1.0"}
