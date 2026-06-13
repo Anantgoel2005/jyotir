@@ -1,0 +1,368 @@
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
+
+/* ── Base ─────────────────────────────────────── */
+@layer base {
+  :root {
+    --color-brand-300: #a78bfa;
+    --color-brand-400: #8b5cf6;
+    --color-brand-500: #7c3aed;
+    --color-brand-600: #6d28d9;
+    --color-gold-300: #fcd34d;
+    --color-gold-400: #fbbf24;
+  }
+
+  body {
+    @apply bg-[#060612] text-zinc-100 antialiased;
+  }
+}
+
+/* ── Animations ──────────────────────────────── */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+@keyframes shimmer-fast {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+  20%, 40%, 60%, 80% { transform: translateX(4px); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(139, 92, 246, 0.2); }
+  50% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.5); }
+}
+@keyframes twinkle-1 {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+}
+@keyframes twinkle-2 {
+  0%, 100% { opacity: 0.5; }
+  33% { opacity: 0.2; }
+  66% { opacity: 0.9; }
+}
+@keyframes twinkle-3 {
+  0%, 100% { opacity: 0.2; }
+  25% { opacity: 0.7; }
+  75% { opacity: 0.1; }
+}
+@keyframes cosmic-drift-1 {
+  0%   { transform: translate(0, 0) scale(1); }
+  33%  { transform: translate(30px, -20px) scale(1.05); }
+  66%  { transform: translate(-20px, 15px) scale(0.95); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+@keyframes cosmic-drift-2 {
+  0%   { transform: translate(0, 0) scale(1); }
+  33%  { transform: translate(-25px, 30px) scale(0.95); }
+  66%  { transform: translate(35px, -10px) scale(1.05); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+@keyframes cosmic-drift-3 {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(20px, 25px) scale(1.03); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+/* ── Starfield layers (pure CSS) ──────────────── */
+.stars-small {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1px 1px at 25% 60%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 40% 15%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 55% 75%, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1px 1px at 70% 35%, rgba(255,255,255,0.3), transparent),
+    radial-gradient(1px 1px at 85% 55%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 15% 85%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 60% 10%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 90% 80%, rgba(255,255,255,0.3), transparent),
+    radial-gradient(1px 1px at 5% 45%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 45% 50%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 80% 25%, rgba(255,255,255,0.6), transparent);
+  background-size: 200px 200px;
+  animation: twinkle-1 3s ease-in-out infinite;
+}
+.stars-medium {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1.5px 1.5px at 20% 30%, rgba(255,255,255,0.7), transparent),
+    radial-gradient(1.5px 1.5px at 50% 70%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1.5px 1.5px at 75% 20%, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1.5px 1.5px at 35% 90%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1.5px 1.5px at 90% 65%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1.5px 1.5px at 10% 10%, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1.5px 1.5px at 65% 45%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1.5px 1.5px at 30% 55%, rgba(255,255,255,0.5), transparent);
+  background-size: 300px 300px;
+  animation: twinkle-2 4s ease-in-out infinite;
+}
+.stars-large {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(2px 2px at 15% 40%, rgba(255,255,255,0.8), transparent),
+    radial-gradient(2px 2px at 60% 25%, rgba(255,255,255,0.6), transparent),
+    radial-gradient(2px 2px at 85% 70%, rgba(255,255,255,0.7), transparent),
+    radial-gradient(2px 2px at 40% 80%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(2px 2px at 95% 15%, rgba(255,255,255,0.6), transparent);
+  background-size: 400px 400px;
+  animation: twinkle-3 5s ease-in-out infinite;
+}
+
+/* ── Cosmic dust / nebula ─────────────────────── */
+.cosmic-dust {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+}
+.cosmic-dust-1 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(139,92,246,0.15), transparent);
+  top: -10%; left: 10%;
+  animation: cosmic-drift-1 20s ease-in-out infinite;
+}
+.cosmic-dust-2 {
+  width: 350px; height: 350px;
+  background: radial-gradient(circle, rgba(245,158,11,0.1), transparent);
+  bottom: -10%; right: 15%;
+  animation: cosmic-drift-2 25s ease-in-out infinite;
+}
+.cosmic-dust-3 {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(59,130,246,0.12), transparent);
+  top: 40%; left: 50%;
+  animation: cosmic-drift-3 18s ease-in-out infinite;
+}
+
+/* ── Utility animation classes ────────────────── */
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out both;
+}
+.animate-slide-up {
+  animation: slide-up 0.7s ease-out both;
+}
+.animate-shimmer {
+  animation: shimmer 2.5s ease-in-out infinite;
+}
+.animate-shimmer-fast {
+  animation: shimmer-fast 1.2s ease-in-out infinite;
+}
+.animate-shake {
+  animation: shake 0.5s ease-in-out;
+}
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* ── Spiritual / Mandala Aesthetic ────────────── */
+@layer components {
+  /* Ornate gold card border */
+  .card-ornate {
+    position: relative;
+    border: 1px solid rgba(251, 191, 36, 0.15);
+    border-radius: 1rem;
+    background: linear-gradient(135deg, rgba(251,191,36,0.03) 0%, rgba(10,10,26,0.9) 50%, rgba(139,92,246,0.03) 100%);
+    overflow: hidden;
+  }
+  .card-ornate::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(251,191,36,0.2), transparent 40%, transparent 60%, rgba(139,92,246,0.2));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* Ornate divider with lotus */
+  .divider-ornate {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .divider-ornate::before,
+  .divider-ornate::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(251,191,36,0.3), transparent);
+  }
+
+  /* Section header with Sanskrit accent */
+  .section-spiritual {
+    position: relative;
+    padding-left: 1.5rem;
+  }
+  .section-spiritual::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    border-radius: 1.5px;
+    background: linear-gradient(180deg, #fbbf24, #fcd34d, #b45309);
+  }
+}
+
+/* ── Mandala watermark ──────────────────────── */
+.mandala-watermark {
+  position: absolute;
+  opacity: 0.03;
+  pointer-events: none;
+  font-size: 20rem;
+  font-family: serif;
+  color: #fbbf24;
+  user-select: none;
+}
+
+/* ── Lotus petal animation ──────────────────── */
+@keyframes lotus-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
+  25% { transform: translateY(-4px) rotate(2deg); opacity: 0.5; }
+  75% { transform: translateY(2px) rotate(-2deg); opacity: 0.2; }
+}
+
+/* ── Sanskrit text glow ─────────────────────── */
+.sanskrit-glow {
+  text-shadow: 0 0 10px rgba(251,191,36,0.3), 0 0 30px rgba(251,191,36,0.1);
+}
+
+/* ── Warm gold text gradient ────────────────── */
+.text-gold-spiritual {
+  background: linear-gradient(135deg, #b45309 0%, #fbbf24 40%, #fef3c7 60%, #fbbf24 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Sacred geometry border ─────────────────── */
+.border-sacred {
+  border-image: linear-gradient(135deg, rgba(251,191,36,0.3), rgba(139,92,246,0.2), rgba(251,191,36,0.3)) 1;
+}
+
+/* ── Enhanced header glow ───────────────────── */
+.header-glow {
+  box-shadow: 0 1px 20px rgba(251,191,36,0.05), 0 1px 3px rgba(251,191,36,0.08);
+}
+
+
+/* ── Custom cosmic scrollbar ───────────────────── */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(251,191,36,0.2), rgba(139,92,246,0.2));
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(251,191,36,0.4), rgba(139,92,246,0.4));
+}
+
+/* ── Mouse glow (subtle radial following cursor) ── */
+.mouse-glow {
+  position: fixed;
+  pointer-events: none;
+  z-index: 5;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(251,191,36,0.04) 0%, rgba(139,92,246,0.02) 35%, transparent 70%);
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s;
+}
+
+/* ── Scroll-reveal animations ──────────────────── */
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+}
+.reveal-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Toast notification ────────────────────────── */
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes toast-out {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to   { opacity: 0; transform: translateY(-10px) scale(0.95); }
+}
+.toast-enter { animation: toast-in 0.3s ease-out forwards; }
+.toast-exit  { animation: toast-out 0.3s ease-in forwards; }
+
+/* ── Smooth page transitions ───────────────────── */
+.page-transition {
+  animation: fade-in 0.5s ease-out both;
+}
+
+/* ── Subtle text selection ─────────────────────── */
+::selection {
+  background: rgba(251,191,36,0.2);
+  color: #fbbf24;
+}
+
+/* ── Print styles ─────────────────────────────── */
+@media print {
+  .stars-small, .stars-medium, .stars-large,
+  .cosmic-dust, .mandala-watermark, .mouse-glow,
+  header, footer, button, nav, .back-to-top,
+  .mouse-glow, canvas {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+    color: #1a1a2e !important;
+  }
+  .card-ornate {
+    border: 1px solid #e5e5e5 !important;
+    background: white !important;
+  }
+  .text-gold-spiritual {
+    color: #b45309 !important;
+    -webkit-text-fill-color: #b45309 !important;
+  }
+  h1, h2, h3, h4 { color: #1a1a2e !important; }
+  p, li { color: #333 !important; }
+  a { color: #b45309 !important; }
+  .prose { max-width: 100% !important; }
+}
