@@ -3,7 +3,6 @@
 import { BirthData, Chart } from "./types"
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "/api"
-if (typeof window !== "undefined") console.log("[Jyotir] API_BASE:", API_BASE)
 
 export async function submitBirthData(data: BirthData): Promise<{ chart_id: string; status: string }> {
   const res = await fetch(`${API_BASE}/chart`, {
@@ -11,12 +10,10 @@ export async function submitBirthData(data: BirthData): Promise<{ chart_id: stri
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   })
-
   if (!res.ok) {
     const err = await res.json().catch(() => ({ detail: res.statusText }))
     throw new Error(err.detail || "Failed to calculate chart")
   }
-
   return res.json()
 }
 
@@ -26,17 +23,11 @@ export async function fetchChart(chartId: string): Promise<Chart> {
   return res.json()
 }
 
-export async function pollChartUntilReady(
-  chartId: string,
-  intervalMs: number = 2000,
-  maxAttempts: number = 60
-): Promise<Chart> {
+export async function pollChartUntilReady(chartId: string, intervalMs = 2000, maxAttempts = 60): Promise<Chart> {
   for (let i = 0; i < maxAttempts; i++) {
     const chart = await fetchChart(chartId)
-    if (chart.status === "ready" || chart.status === "failed") {
-      return chart
-    }
-    await new Promise(resolve => setTimeout(resolve, intervalMs))
+    if (chart.status === "ready" || chart.status === "failed") return chart
+    await new Promise(r => setTimeout(r, intervalMs))
   }
   throw new Error("Chart generation timed out")
 }
