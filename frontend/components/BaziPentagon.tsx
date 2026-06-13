@@ -116,7 +116,7 @@ export function BaziPentagon({ rawChart }: Props) {
                 <circle cx={ex} cy={ey} r={27} fill={el.color} opacity="0.08" />
                 <circle cx={ex} cy={ey} r={22} fill="rgba(16,8,12,0.95)" stroke={el.color} strokeWidth="2" filter="url(#fireGlow)" />
                 <text x={ex} y={ey + 1} textAnchor="middle" dominantBaseline="central"
-                  fill={el.color} fontSize={22} fontWeight="bold" fontFamily="serif" filter="url(#fireGlow)}>
+                  fill={el.color} fontSize={22} fontWeight="bold" fontFamily="serif" filter="url(#fireGlow)">
                   {ELEMENT_CHARS[el.name.split(" ")[0]] || "?"}
                 </text>
                 <text x={ex} y={ey + 34} textAnchor="middle" fill={el.color} fontSize={9} opacity="0.7">
