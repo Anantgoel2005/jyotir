@@ -14,7 +14,7 @@ export function ChatPanel({ chartId }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null)
 
   const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
-    api: "/api/chat/" + chartId,
+    api: (process.env.NEXT_PUBLIC_API_URL || "") + "/api/chat/" + chartId,
   })
 
   useEffect(() => {

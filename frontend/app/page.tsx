@@ -47,7 +47,8 @@ export default function Home() {
     resolvedRef.current = false
     setStep("streaming")
 
-    const eventSource = new EventSource("/api/chart/" + chartId + "/breakdown-stream")
+    const apiBase = process.env.NEXT_PUBLIC_API_URL || ""
+    const eventSource = new EventSource(apiBase + "/api/chart/" + chartId + "/breakdown-stream")
 
     eventSource.onmessage = (event) => {
       try {

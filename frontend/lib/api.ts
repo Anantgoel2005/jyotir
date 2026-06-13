@@ -2,7 +2,7 @@
 
 import { BirthData, Chart } from "./types"
 
-const API_BASE = "/api"   // proxied by next.config.js → FastAPI :9000
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "/api"
 
 export async function submitBirthData(data: BirthData): Promise<{ chart_id: string; status: string }> {
   const res = await fetch(`${API_BASE}/chart`, {
@@ -25,9 +25,6 @@ export async function fetchChart(chartId: string): Promise<Chart> {
   return res.json()
 }
 
-/**
- * Poll for chart completion. Returns the chart once status is "ready" or "failed".
- */
 export async function pollChartUntilReady(
   chartId: string,
   intervalMs: number = 2000,
