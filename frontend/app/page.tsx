@@ -157,12 +157,9 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Cosmic loader — large, immersive */}
+            {/* Cosmic progress — loader + progress bar */}
             <div className="my-2">
-              {system === "vedic" && <VedicCosmosLoader streamDone={streamDone} />}
-            {system === "tropical" && <TropicalAspectsLoader streamDone={streamDone} />}
-            {system === "bazi" && <BaziElementsLoader streamDone={streamDone} />}
-            {!system && <VedicCosmosLoader streamDone={streamDone} />}
+              <CosmicProgress tokenCount={tokenCount} maxTokens={8192} streamingText={streamingTokens} streamDone={streamDone} system={system || "vedic"} />
             </div>
 
             {/* Constellation count */}
