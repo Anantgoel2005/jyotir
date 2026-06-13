@@ -311,6 +311,7 @@ export function MandalaChartWheel({ planets }: Props) {
 
           return (
             <g key={p.name}>
+              <title>{p.name} in {p.sign} · House {p.house || "?"} · {Math.floor(p.fullDegree || 0)}°{p.nakshatra ? " · " + p.nakshatra : ""}{p.isRetro === "true" ? " · Retrograde" : ""}</title>
               {/* Planet glow */}
               <circle cx={px} cy={py} r={12} fill={color} opacity="0.12" filter="url(#softGlow)" />
               {/* Planet ring */}
