@@ -23,6 +23,7 @@ export default function Home() {
   const [streamingPerson, setStreamingPerson] = useState("")
   const [streamingTokens, setStreamingTokens] = useState("")
   const [streamDone, setStreamDone] = useState(false)
+  const [tokenCount, setTokenCount] = useState(0)
   const scrollRef = useRef<HTMLDivElement>(null)
 
   const streamDoneRef = useRef(false)
@@ -42,6 +43,7 @@ export default function Home() {
     setStreamingPerson(personName)
     setStreamingTokens("")
     setStreamDone(false)
+    setTokenCount(0)
     streamDoneRef.current = false
     resolvedRef.current = false
     setStep("streaming")
@@ -53,7 +55,7 @@ export default function Home() {
       try {
         const data = JSON.parse(event.data)
         if (data.token) {
-          setStreamingTokens(function (prev) { return prev + data.token })
+          setStreamingTokens(function (prev) { return prev + data.token }); setTokenCount(function (prev) { return prev + 1 })
         } else if (data.done) {
           eventSource.close()
           setStreamDone(true)
