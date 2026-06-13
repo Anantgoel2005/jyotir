@@ -108,7 +108,7 @@ export function BaziPentagon({ rawChart }: Props) {
               <circle cx={ex} cy={ey} r={22} fill="rgba(16,8,12,0.95)" stroke={el.color} strokeWidth="2" filter="url(#fireGlow)" />
               {/* Character */}
               <text x={ex} y={ey + 1} textAnchor="middle" dominantBaseline="central"
-                fill={el.color} fontSize={22} fontWeight="bold" fontFamily="serif" filter="url(#fireGlow)">
+                fill={el.color} fontSize={22} fontWeight="bold" fontFamily="serif" filter="url(#fireGlow)"><title>{el.name}</title>
                 {ELEMENT_CHARS[el.name.split(" ")[0]] || "?"}
               </text>
               {/* Name below */}
@@ -125,7 +125,7 @@ export function BaziPentagon({ rawChart }: Props) {
         <text x={cx} y={cy - 10} textAnchor="middle" fill="#fbbf24" fontSize={11} fontWeight="bold">
           Day Master
         </text>
-        <text x={cx} y={cy + 10} textAnchor="middle" fill={ELEMENT_COLORS[dayMaster] || "#fbbf24"} fontSize={22} fontWeight="bold" fontFamily="serif">
+        <text x={cx} y={cy + 10} textAnchor="middle" fill={ELEMENT_COLORS[dayMaster] || "#fbbf24"} fontSize={22} fontWeight="bold" fontFamily="serif"><title>Day Master: {dayMasterStem} - {dayMaster}</title>
           {dayMasterStem || "—"}
         </text>
         <text x={cx} y={cy + 26} textAnchor="middle" fill={ELEMENT_COLORS[dayMaster] || "#fbbf24"} fontSize={9} opacity="0.7">
