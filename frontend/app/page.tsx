@@ -165,12 +165,6 @@ export default function Home() {
               <CosmicProgress tokenCount={tokenCount} maxTokens={8192} streamingText={streamingTokens} streamDone={streamDone} system={system || "vedic"} />
             </div>
 
-            {/* Constellation count */}
-            {!streamDone && (
-              <div className="flex items-center justify-center gap-6 text-[10px] text-zinc-600 mb-4">
-                <CosmicProgress tokenCount={tokenCount} maxTokens={8192} streamingText={streamingTokens} streamDone={streamDone} system={system || "vedic"} />
-              </div>
-            )}
 
             {/* Divider — only when tokens are flowing */}
             {streamingTokens && (
