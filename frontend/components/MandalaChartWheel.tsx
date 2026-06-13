@@ -1,5 +1,7 @@
 "use client"
 
+import { ChartTooltip } from "@/components/ChartTooltip"
+
 // ── Sanskrit Zodiac Signs ──────────────────────────────
 const ZODIAC_SANSKRIT = [
   "मेष", "वृषभ", "मिथुन", "कर्क", "सिंह", "कन्या",
@@ -225,7 +227,7 @@ export function MandalaChartWheel({ planets }: Props) {
         {Array.from({ length: 12 }, (_, i) => {
           const angle = toAngle(i * 30 + 15)
           const inAng = toAngle(i * 30)
-          const nr = Math.floor(i / 2) % 2 === 0 ? houseR : houseR + 8 // alternating
+          const nr = houseR
           const hx = cx + nr * Math.cos(angle)
           const hy = cy + nr * Math.sin(angle)
           const lx1 = cx + (innerR + 18) * Math.cos(inAng)
