@@ -27,7 +27,7 @@ class Settings(BaseSettings):
     deepseek_api_key: str = ""
 
     # -- CORS -------------------------------------------------
-    cors_origins: str = '["http://localhost:3000"]'
+    cors_origins: str = '["*"]'  # Permissive — restrict after deploy
 
     @property
     def cors_origins_list(self) -> List[str]:
