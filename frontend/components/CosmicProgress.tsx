@@ -62,7 +62,7 @@ export function CosmicProgress({ tokenCount, maxTokens, streamingText, streamDon
         x: Math.random(), y: Math.random(),
         r: 0.3 + Math.random() * 1.5,
         phase: Math.random() * Math.PI * 2,
-        speed: 0.004 + Math.random() * 0.02,
+        speed: 0.001 + Math.random() * 0.005,
         alpha: 0.3 + Math.random() * 0.7,
       })
     }
@@ -108,7 +108,7 @@ export function CosmicProgress({ tokenCount, maxTokens, streamingText, streamDon
 
       // Orbiting planets
       for (let i = 0; i < 8; i++) {
-        const a = (i / 8) * Math.PI * 2 + t * (0.0002 + i * 0.0001)
+        const a = (i / 8) * Math.PI * 2 + t * (0.00005 + i * 0.00003)
         const or = zR + 15 + i * 5
         const px = cx + or * Math.cos(a); const py = cy + or * Math.sin(a)
         const hue = (theme.hue + i * 30) % 360
@@ -119,7 +119,7 @@ export function CosmicProgress({ tokenCount, maxTokens, streamingText, streamDon
 
       // Center glow
       const cg = ctx.createRadialGradient(cx, cy, 0, cx, cy, 50)
-      const pulse = 0.06 + Math.sin(t * 0.003) * 0.03
+      const pulse = 0.06 + Math.sin(t * 0.001) * 0.03
       cg.addColorStop(0, `rgba(${theme.glow},${pulse})`)
       cg.addColorStop(1, "rgba(0,0,0,0)")
       ctx.fillStyle = cg
@@ -133,8 +133,8 @@ export function CosmicProgress({ tokenCount, maxTokens, streamingText, streamDon
 
       // Floating particles
       for (let i = 0; i < 20; i++) {
-        const dx = cx + Math.sin(t * 0.0004 + i * 0.8) * 120
-        const dy = cy + Math.cos(t * 0.0006 + i * 1.1) * 70
+        const dx = cx + Math.sin(t * 0.00015 + i * 0.8) * 120
+        const dy = cy + Math.cos(t * 0.0002 + i * 1.1) * 70
         ctx.beginPath(); ctx.arc(dx, dy, 0.7, 0, Math.PI * 2)
         ctx.fillStyle = `rgba(255,255,255,${0.06 + Math.sin(t * 0.002 + i) * 0.03})`
         ctx.fill()
