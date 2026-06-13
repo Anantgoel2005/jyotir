@@ -1,7 +1,5 @@
 "use client"
 
-import { ChartTooltip } from "@/components/ChartTooltip"
-
 const ZODIAC_GLYPHS = ["♈", "♉", "♊", "♋", "♌", "♍", "♎", "♏", "♐", "♑", "♒", "♓"]
 
 const PLANET_GLYPHS: Record<string, string> = {

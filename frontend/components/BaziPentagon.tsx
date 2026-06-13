@@ -1,7 +1,5 @@
 "use client"
 
-import { ChartTooltip } from "@/components/ChartTooltip"
-
 interface Props {
   rawChart: Record<string, any>
 }
@@ -103,10 +101,6 @@ export function BaziPentagon({ rawChart }: Props) {
           const ex = cx + pentaR * Math.cos(angle)
           const ey = cy + pentaR * Math.sin(angle)
           return (
-            <ChartTooltip
-              key={el.name}
-              content={
-                <div className="space-y-1">
                   <div className="font-bold" style={{ color: el.color }}>{el.name}</div>
                   <div className="text-zinc-400">One of the Five Elements (五行)</div>
                 </div>
@@ -123,7 +117,7 @@ export function BaziPentagon({ rawChart }: Props) {
                   {el.name}
                 </text>
               </g>
-            </ChartTooltip>
+            
           )
         })}
 

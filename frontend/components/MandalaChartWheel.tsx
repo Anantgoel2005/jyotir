@@ -1,7 +1,5 @@
 "use client"
 
-import { ChartTooltip } from "@/components/ChartTooltip"
-
 // ── Sanskrit Zodiac Signs ──────────────────────────────
 const ZODIAC_SANSKRIT = [
   "मेष", "वृषभ", "मिथुन", "कर्क", "सिंह", "कन्या",
