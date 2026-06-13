@@ -1,5 +1,7 @@
 "use client"
 
+import { ChartTooltip } from "@/components/ChartTooltip"
+
 interface Props {
   rawChart: Record<string, any>
 }
@@ -101,21 +103,27 @@ export function BaziPentagon({ rawChart }: Props) {
           const ex = cx + pentaR * Math.cos(angle)
           const ey = cy + pentaR * Math.sin(angle)
           return (
-            <g key={el.name}>
-              {/* Outer glow */}
-              <circle cx={ex} cy={ey} r={27} fill={el.color} opacity="0.08" />
-              {/* Node */}
-              <circle cx={ex} cy={ey} r={22} fill="rgba(16,8,12,0.95)" stroke={el.color} strokeWidth="2" filter="url(#fireGlow)" />
-              {/* Character */}
-              <text x={ex} y={ey + 1} textAnchor="middle" dominantBaseline="central"
-                fill={el.color} fontSize={22} fontWeight="bold" fontFamily="serif" filter="url(#fireGlow)"><title>{el.name}</title>
-                {ELEMENT_CHARS[el.name.split(" ")[0]] || "?"}
-              </text>
-              {/* Name below */}
-              <text x={ex} y={ey + 34} textAnchor="middle" fill={el.color} fontSize={9} opacity="0.7">
-                {el.name}
-              </text>
-            </g>
+            <ChartTooltip
+              key={el.name}
+              content={
+                <div className="space-y-1">
+                  <div className="font-bold" style={{ color: el.color }}>{el.name}</div>
+                  <div className="text-zinc-400">One of the Five Elements (五行)</div>
+                </div>
+              }
+            >
+              <g>
+                <circle cx={ex} cy={ey} r={27} fill={el.color} opacity="0.08" />
+                <circle cx={ex} cy={ey} r={22} fill="rgba(16,8,12,0.95)" stroke={el.color} strokeWidth="2" filter="url(#fireGlow)" />
+                <text x={ex} y={ey + 1} textAnchor="middle" dominantBaseline="central"
+                  fill={el.color} fontSize={22} fontWeight="bold" fontFamily="serif" filter="url(#fireGlow)}>
+                  {ELEMENT_CHARS[el.name.split(" ")[0]] || "?"}
+                </text>
+                <text x={ex} y={ey + 34} textAnchor="middle" fill={el.color} fontSize={9} opacity="0.7">
+                  {el.name}
+                </text>
+              </g>
+            </ChartTooltip>
           )
         })}
 
