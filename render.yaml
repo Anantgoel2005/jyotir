@@ -41,10 +41,7 @@ services:
     rootDir: frontend
     envVars:
       - key: NEXT_PUBLIC_API_URL
-        fromService:
-          name: jyotir-api
-          type: web
-          property: url
+        value: https://jyotir-api.onrender.com
 
 databases:
   - name: jyotir-db
