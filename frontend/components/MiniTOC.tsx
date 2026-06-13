@@ -6,10 +6,8 @@ function extractSections(text: string): { id: string; title: string; level: numb
   const lines = text.split("\n")
   const sections: { id: string; title: string; level: number }[] = []
   let counter = 0
-
   for (const line of lines) {
-    const t = line.trim()
-    const h2 = t.match(/^##\s+(.+)/)
+    const h2 = line.trim().match(/^##\s+(.+)/)
     if (h2) {
       sections.push({ id: `s${counter++}`, title: h2[1].replace(/\*\*/g, "").trim().slice(0, 35), level: 1 })
     }
@@ -18,9 +16,16 @@ function extractSections(text: string): { id: string; title: string; level: numb
 }
 
 export function MiniTOC() {
-  const sections = extractSections(text)
+  const [text, setText] = useState("")
   const [active, setActive] = useState(0)
   const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const el = document.querySelector("[data-breakdown-text]")
+    if (el) setText(el.getAttribute("data-breakdown-text") || "")
+  }, [])
+
+  const sections = extractSections(text)
 
   useEffect(() => {
     const check = () => setVisible(window.scrollY > 500)
@@ -30,22 +35,18 @@ export function MiniTOC() {
 
   useEffect(() => {
     if (!visible || sections.length === 0) return
-
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
-            const id = entry.target.id
-            const idx = sections.findIndex(s => s.id === id)
+            const idx = sections.findIndex(s => s.id === entry.target.id)
             if (idx >= 0) setActive(idx)
           }
         }
       },
       { rootMargin: "-80px 0px -60% 0px", threshold: 0 }
     )
-
-    // Add IDs to section headings in the DOM
-    const headings = document.querySelectorAll('[data-section-id]')
+    const headings = document.querySelectorAll("[data-section-id]")
     headings.forEach(h => observer.observe(h))
     return () => observer.disconnect()
   }, [visible, sections])
