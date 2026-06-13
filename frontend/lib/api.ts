@@ -3,6 +3,7 @@
 import { BirthData, Chart } from "./types"
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "/api"
+if (typeof window !== "undefined") console.log("[Jyotir] API_BASE:", API_BASE)
 
 export async function submitBirthData(data: BirthData): Promise<{ chart_id: string; status: string }> {
   const res = await fetch(`${API_BASE}/chart`, {
