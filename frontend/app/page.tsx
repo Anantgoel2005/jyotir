@@ -4,9 +4,7 @@ import { useState, useRef, useEffect } from "react"
 import { SystemSelector } from "@/components/SystemSelector"
 import { BirthDataForm } from "@/components/BirthDataForm"
 import { BreakdownDisplay } from "@/components/BreakdownDisplay"
-import { VedicCosmosLoader } from "@/components/VedicCosmosLoader"
-import { TropicalAspectsLoader } from "@/components/TropicalAspectsLoader"
-import { BaziElementsLoader } from "@/components/BaziElementsLoader"
+
 import { ChatPanel } from "@/components/ChatPanel"
 import { Chart } from "@/lib/types"
 import { fetchChart } from "@/lib/api"
@@ -170,58 +168,7 @@ export default function Home() {
             {/* Constellation count */}
             {!streamDone && (
               <div className="flex items-center justify-center gap-6 text-[10px] text-zinc-600 mb-4">
-                {system === "vedic" ? (
-                  <>
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-1 h-1 rounded-full bg-amber-400/60 animate-pulse" />
-                      Calculating grahas
-                    </div>
-                    <span className="text-zinc-800">·</span>
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-1 h-1 rounded-full bg-amber-400/60 animate-pulse delay-200" />
-                      Reading nakshatras
-                    </div>
-                    <span className="text-zinc-800">·</span>
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-1 h-1 rounded-full bg-amber-400/60 animate-pulse delay-400" />
-                      Interpreting dashas
-                    </div>
-                  </>
-                ) : system === "tropical" ? (
-                  <>
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-1 h-1 rounded-full bg-indigo-400/60 animate-pulse" />
-                      Mapping aspects
-                    </div>
-                    <span className="text-zinc-800">·</span>
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-1 h-1 rounded-full bg-indigo-400/60 animate-pulse delay-200" />
-                      Calculating houses
-                    </div>
-                    <span className="text-zinc-800">·</span>
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-1 h-1 rounded-full bg-indigo-400/60 animate-pulse delay-400" />
-                      Weaving interpretation
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-1 h-1 rounded-full bg-red-400/60 animate-pulse" />
-                      Balancing elements
-                    </div>
-                    <span className="text-zinc-800">·</span>
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-1 h-1 rounded-full bg-red-400/60 animate-pulse delay-200" />
-                      Reading pillars
-                    </div>
-                    <span className="text-zinc-800">·</span>
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-1 h-1 rounded-full bg-red-400/60 animate-pulse delay-400" />
-                      Revealing destiny
-                    </div>
-                  </>
-                )}
+                <CosmicProgress tokenCount={tokenCount} maxTokens={8192} streamingText={streamingTokens} streamDone={streamDone} system={system || "vedic"} />
               </div>
             )}
 
