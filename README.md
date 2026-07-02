@@ -1,6 +1,8 @@
 # Jyotir
 **AI-Powered Astrology Platform**
 
+**[Live Demo / Active Testing Link](https://jyotir-web.onrender.com/)**
+
 An end-to-end online astrology platform that computes precise natal charts
 via the **AstrologyAPI.com** service and generates deeply personalized
 astrological breakdowns using LLMs (via **OpenRouter**).
