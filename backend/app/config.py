@@ -60,8 +60,6 @@ class Settings(BaseSettings):
     @model_validator(mode="after")
     def validate_production(self):
         if self.app_env == "production":
-            if not self.database_url:
-                raise ValueError("DATABASE_URL is required in production")
             if not self.active_llm_api_key or not self.astrology_api_key:
                 raise ValueError("Provider API keys (ASTROLOGY_API_KEY and GROQ_API_KEY / LLM_API_KEY) are required in production")
             if "*" in self.cors_origins_list:
