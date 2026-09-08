@@ -4,6 +4,7 @@ Auth: x-astrologyapi-key header (Access Token / Wallet Token)
 Base: https://json.astrologyapi.com/v1/
 """
 
+import asyncio
 from typing import Any
 import httpx
 from app.config import get_settings
@@ -14,6 +15,8 @@ ASTROLOGY_API_BASE = "https://json.astrologyapi.com/v1"
 
 
 def _headers() -> dict[str, str]:
+    if not settings.astrology_api_key:
+        raise RuntimeError("ASTROLOGY_API_NOT_CONFIGURED")
     return {
         "x-astrologyapi-key": settings.astrology_api_key,
         "Content-Type": "application/json",
@@ -63,14 +66,7 @@ async def fetch_tropical_chart(
     """
     payload = _build_payload(name, birth_date, birth_time, lat, lng, tz_offset, gender)
 
-    async with httpx.AsyncClient(timeout=30.0) as client:
-        resp = await client.post(
-            f"{ASTROLOGY_API_BASE}/western_horoscope",
-            json=payload,
-            headers=_headers(),
-        )
-        resp.raise_for_status()
-        return resp.json()
+    return await _post("western_horoscope", payload)
 
 
 async def fetch_vedic_chart(
@@ -88,14 +84,30 @@ async def fetch_vedic_chart(
     """
     payload = _build_payload(name, birth_date, birth_time, lat, lng, tz_offset, gender)
 
-    async with httpx.AsyncClient(timeout=30.0) as client:
-        resp = await client.post(
-            f"{ASTROLOGY_API_BASE}/planets/extended",
-            json=payload,
-            headers=_headers(),
-        )
-        resp.raise_for_status()
-        return resp.json()
+    return await _post("planets/extended", payload)
+
+
+async def _post(endpoint: str, payload: dict[str, Any]) -> dict[str, Any]:
+    last_error: Exception | None = None
+    for attempt in range(3):
+        try:
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                response = await client.post(
+                    f"{ASTROLOGY_API_BASE}/{endpoint}",
+                    json=payload,
+                    headers=_headers(),
+                )
+                response.raise_for_status()
+                data = response.json()
+                if not isinstance(data, (dict, list)):
+                    raise RuntimeError("ASTROLOGY_API_INVALID_RESPONSE")
+                return data
+        except (httpx.TimeoutException, httpx.NetworkError, httpx.HTTPStatusError) as exc:
+            last_error = exc
+            if isinstance(exc, httpx.HTTPStatusError) and exc.response.status_code < 500:
+                break
+            await asyncio.sleep(0.4 * (2**attempt))
+    raise RuntimeError("ASTROLOGY_API_UNAVAILABLE") from last_error
 
 
 async def calculate_bazi_chart(

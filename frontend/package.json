@@ -1,39 +1,50 @@
 {
-  "name": "jyotir",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "@radix-ui/react-dialog": "^1.1.0",
-    "@radix-ui/react-select": "^2.1.0",
-    "@radix-ui/react-slot": "^1.1.0",
-    "@radix-ui/react-tabs": "^1.1.0",
-    "ai": "^3.4.0",
-    "class-variance-authority": "^0.7.0",
-    "clsx": "^2.1.0",
-    "lucide-react": "^0.400.0",
-    "next": "^14.2.0",
-    "react": "^18.3.0",
-    "react-dom": "^18.3.0",
-    "react-hook-form": "^7.52.0",
-    "tailwind-merge": "^2.4.0",
-    "tailwindcss-animate": "^1.0.7",
-    "zod": "^3.23.0",
-    "@hookform/resolvers": "^3.9.0",
-    "zustand": "^4.5.0"
-  },
-  "devDependencies": {
-    "@types/node": "^20.14.0",
-    "@types/react": "^18.3.0",
-    "@types/react-dom": "^18.3.0",
-    "autoprefixer": "^10.4.0",
-    "postcss": "^8.4.0",
-    "tailwindcss": "^3.4.0",
-    "typescript": "^5.5.0"
-  }
+	"name": "jyotir",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev",
+		"dev:fresh": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"if (Test-Path .next) { Remove-Item -LiteralPath .next -Recurse -Force }; next dev\"",
+		"build": "next build",
+		"start": "next start",
+		"lint": "biome lint app components lib tests",
+		"typecheck": "tsc --noEmit",
+		"test": "vitest run"
+	},
+	"dependencies": {
+		"@radix-ui/react-dialog": "^1.1.0",
+		"@radix-ui/react-select": "^2.1.0",
+		"@radix-ui/react-slot": "^1.1.0",
+		"@radix-ui/react-tabs": "^1.1.0",
+		"class-variance-authority": "^0.7.0",
+		"clsx": "^2.1.0",
+		"lucide-react": "^0.400.0",
+		"next": "^15.5.21",
+		"react": "^18.3.0",
+		"react-dom": "^18.3.0",
+		"react-hook-form": "^7.52.0",
+		"tailwind-merge": "^2.4.0",
+		"tailwindcss-animate": "^1.0.7",
+		"zod": "^3.23.0",
+		"@hookform/resolvers": "^3.9.0",
+		"zustand": "^4.5.0"
+	},
+	"devDependencies": {
+		"@types/node": "^20.14.0",
+		"@types/react": "^18.3.0",
+		"@types/react-dom": "^18.3.0",
+		"autoprefixer": "^10.4.0",
+		"postcss": "^8.5.18",
+		"tailwindcss": "^3.4.0",
+		"typescript": "^5.5.0",
+		"@testing-library/react": "^16.0.0",
+		"@testing-library/jest-dom": "^6.4.6",
+		"@biomejs/biome": "^2.5.5",
+		"jsdom": "^24.1.0",
+		"vitest": "^4.1.10"
+	},
+	"overrides": {
+		"postcss": "^8.5.18",
+		"sharp": "^0.35.0"
+	}
 }

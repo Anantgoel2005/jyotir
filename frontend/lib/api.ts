@@ -1,38 +1,62 @@
-// lib/api.ts — API client for the Jyotir backend
+import type {
+  BirthData,
+  Chart,
+  ChartSummary,
+  LocationResult,
+  StreamEvent,
+} from "./types"
 
-import { BirthData, Chart } from "./types"
+async function api<T>(path: string, init?: RequestInit): Promise<T> {
+  const response = await fetch(`/api/${path}`, {
+    ...init,
+    headers: {
+      ...(init?.body ? { "Content-Type": "application/json" } : {}),
+      ...init?.headers,
+    },
+  })
+  if (!response.ok) {
+    const body = await response.json().catch(() => ({ detail: "REQUEST_FAILED" }))
+    const detail = typeof body.detail === "string" ? body.detail : body.detail?.code
+    throw new Error(detail || "REQUEST_FAILED")
+  }
+  return response.status === 204 ? (undefined as T) : response.json()
+}
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "/api"
-
-export async function submitBirthData(data: BirthData): Promise<{ chart_id: string; status: string }> {
-  const res = await fetch(`${API_BASE}/api/chart`, {
+export const listCharts = () => api<ChartSummary[]>("charts")
+export const getChart = (id: string) => api<Chart>(`charts/${id}`)
+export const createChart = (data: BirthData) =>
+  api<{ chart_id: string; status: string }>("charts", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   })
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({ detail: res.statusText }))
-    throw new Error(err.detail || "Failed to calculate chart")
+export const deleteChart = (id: string) =>
+  api<void>(`charts/${id}`, { method: "DELETE" })
+export const retryGeneration = (id: string) =>
+  api(`charts/${id}/generation`, { method: "POST" })
+export const searchLocations = (query: string, language: string, signal?: AbortSignal) =>
+  api<LocationResult[]>(
+    `locations?query=${encodeURIComponent(query)}&language=${language}`,
+    { signal },
+  )
+
+export async function readNdjson(
+  path: string,
+  onEvent: (event: StreamEvent) => void,
+  init?: RequestInit,
+) {
+  const response = await fetch(`/api/${path}`, init)
+  if (!response.ok || !response.body) throw new Error("STREAM_UNAVAILABLE")
+  const reader = response.body.getReader()
+  const decoder = new TextDecoder()
+  let buffer = ""
+  while (true) {
+    const { done, value } = await reader.read()
+    buffer += decoder.decode(value || new Uint8Array(), { stream: !done })
+    const lines = buffer.split("\n")
+    buffer = lines.pop() || ""
+    for (const line of lines) {
+      if (line.trim()) onEvent(JSON.parse(line))
+    }
+    if (done) break
   }
-  return res.json()
-}
-
-export async function fetchChart(chartId: string): Promise<Chart> {
-  const res = await fetch(`${API_BASE}/api/chart/${chartId}`)
-  if (!res.ok) throw new Error("Chart not found")
-  return res.json()
-}
-
-export async function pollChartUntilReady(chartId: string, intervalMs = 2000, maxAttempts = 60): Promise<Chart> {
-  for (let i = 0; i < maxAttempts; i++) {
-    const chart = await fetchChart(chartId)
-    if (chart.status === "ready" || chart.status === "failed") return chart
-    await new Promise(r => setTimeout(r, intervalMs))
-  }
-  throw new Error("Chart generation timed out")
-}
-
-export async function deleteChart(chartId: string): Promise<void> {
-  const res = await fetch(`${API_BASE}/api/chart/${chartId}`, { method: "DELETE" })
-  if (!res.ok) throw new Error("Failed to delete chart")
 }

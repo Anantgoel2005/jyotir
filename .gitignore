@@ -2,8 +2,10 @@
 __pycache__/
 *.py[cod]
 .venv/
+.test-venv/
 venv/
 *.egg-info/
+.pytest_cache/
 
 # Database
 *.db
@@ -26,7 +28,7 @@ Thumbs.db
 .next/
 node_modules/
 out/
+*.tsbuildinfo
 
 # Logs
 *.log
-

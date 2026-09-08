@@ -1,161 +1,95 @@
 # Jyotir
-**AI-Powered Astrology Platform**
 
-**[Live Demo / Active Testing Link](https://jyotir-web.onrender.com/)**
-
-An end-to-end online astrology platform that computes precise natal charts
-via the **AstrologyAPI.com** service and generates deeply personalized
-astrological breakdowns using LLMs (via **OpenRouter**).
-
-Supports three astrological traditions:
-- **Tropical** — Western psychological astrology
-- **Vedic** — Jyotish with nakshatras and dashas
-- **Bazi** — Chinese Four Pillars of Destiny
+Jyotir is a private AI astrology reading studio for Tropical, Vedic, and Bazi charts. The interface is built with Next.js 14; FastAPI calculates charts, persists private anonymous sessions in PostgreSQL, and streams DeepSeek interpretations.
 
 ## Architecture
 
-```
-┌──────────────┐      SSE Stream      ┌──────────────┐
-│   Next.js 14 │◄────────────────────►│   FastAPI     │
-│   (Vercel)   │   POST /api/chat/*   │   (Railway)   │
-│              │                      │              │
-│ Tailwind CSS │                      │ PostgreSQL 15│
-│ shadcn/ui    │                      │ Redis         │
-│ Vercel AI SDK│                      │ OpenRouter    │
-└──────────────┘                      └──────────────┘
-                                             │
-                                      ┌──────┴──────┐
-                                      │ AstrologyAPI │
-                                      │ (Swiss       │
-                                      │  Ephemeris)  │
-                                      └─────────────┘
+```text
+Browser
+  │ same-origin /api + HTTP-only anonymous-session cookie
+  ▼
+Next.js route handler (BFF)
+  │ Authorization: Bearer <opaque token>
+  ▼
+FastAPI /api/v1
+  ├─ PostgreSQL: sessions, charts, generation leases, chat
+  ├─ AstrologyAPI: Tropical and Vedic calculation
+  ├─ lunar-python: Bazi Four Pillars
+  ├─ Open-Meteo: demo geocoding
+  └─ DeepSeek: streamed reading and consultation
 ```
 
-## Deploy
+Each browser receives a private anonymous session. Tokens are stored only in an HTTP-only cookie and only their SHA-256 hashes are persisted. Sessions and their charts expire after 30 days.
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Anantgoel2005/jyotir)
+## Local setup
 
-## Quick Start
+### Docker
 
-### Prerequisites
-- Docker and Docker Compose
-- Node.js 18+
-- An AstrologyAPI.com API key
-- An OpenRouter API key
+1. Copy `backend/.env.example` to `backend/.env` and set `ASTROLOGY_API_KEY` and `DEEPSEEK_API_KEY`.
+2. Export the same two variables for Docker Compose.
+3. Run:
 
-### Setup
-
-1. **Clone and configure**
-   ```bash
-   git clone <repo-url> jyotir
-   cd jyotir
-
-   # Backend env
-   cp backend/.env.example backend/.env
-   # Edit backend/.env with your API keys
-   ```
-
-2. **Start backend services**
-   ```bash
-   docker compose up -d db redis
-   ```
-
-3. **Install and run backend**
-   ```bash
-   cd backend
-   python -m venv venv
-   source venv/bin/activate   # Windows: venv\Scripts\activate
-   pip install -r requirements.txt
-   uvicorn app.main:app --reload --port 9000
-   ```
-
-4. **Install and run frontend**
-   ```bash
-   cd frontend
-   npm install
-   npm run dev
-   ```
-
-5. **Open** http://localhost:3000
-
-## Project Structure
-
-```
-jyotir/
-├── backend/
-│   ├── app/
-│   │   ├── main.py              # FastAPI entrypoint
-│   │   ├── config.py            # Pydantic settings
-│   │   ├── database.py          # SQLAlchemy async engine
-│   │   ├── models/              # SQLAlchemy ORM models
-│   │   │   ├── user.py
-│   │   │   ├── chart.py
-│   │   │   ├── chat.py
-│   │   │   └── credit.py
-│   │   ├── schemas/             # Pydantic request/response
-│   │   │   ├── chart.py
-│   │   │   └── chat.py
-│   │   ├── services/            # Business logic
-│   │   │   ├── astro_api.py     # AstrologyAPI.com client
-│   │   │   ├── chart_enrichment.py
-│   │   │   ├── llm_client.py    # OpenRouter streaming
-│   │   │   └── prompt_builder.py
-│   │   └── routers/             # API endpoints
-│   │       ├── chart.py
-│   │       └── chat.py
-│   ├── requirements.txt
-│   ├── Dockerfile
-│   └── .env.example
-├── frontend/
-│   ├── app/
-│   │   ├── layout.tsx
-│   │   ├── page.tsx
-│   │   └── globals.css
-│   ├── components/
-│   │   ├── SystemSelector.tsx
-│   │   ├── BirthDataForm.tsx
-│   │   ├── BreakdownDisplay.tsx
-│   │   └── ChatPanel.tsx
-│   ├── lib/
-│   │   ├── types.ts
-│   │   └── api.ts
-│   ├── package.json
-│   └── tailwind.config.ts
-├── docker-compose.yml
-└── README.md
+```bash
+docker compose up --build
 ```
 
-## API Endpoints
+Open <http://localhost:3000>. The backend is available on <http://localhost:9000>.
 
-| Method | Path | Description |
-|--------|------|-------------|
-| `POST` | `/api/chart` | Submit birth data, get chart + breakdown |
-| `GET` | `/api/chart/{id}` | Get full chart with breakdown |
-| `GET` | `/api/charts` | List user's charts |
-| `DELETE` | `/api/chart/{id}` | Delete a chart |
-| `POST` | `/api/chat/{chart_id}` | Chat with astrologer (SSE stream) |
-| `GET` | `/api/conversations/{chart_id}` | List conversations for chart |
-| `GET` | `/api/conversation/{id}` | Get conversation with messages |
-| `GET` | `/api/health` | Health check |
+### Native development
 
-## Key Design Decisions
+Backend:
 
-- **Chart in system prompt** — every chat turn injects the full natal chart into the LLM system prompt. No RAG needed. Guarantees zero hallucination on planetary positions.
-- **SSE streaming** — chat responses stream token-by-token using Server-Sent Events. Vercel AI SDK consumes this natively on the frontend.
-- **Stateless backend** — no session state. Every request is self-contained. Scales horizontally.
-- **Two-prompt architecture** — Breakdown uses Claude Sonnet 4 (high quality). Chat uses DeepSeek (fast + affordable).
+```bash
+cd backend
+python -m venv .venv
+.venv/Scripts/activate
+pip install -r requirements.txt
+alembic upgrade head
+uvicorn app.main:app --reload --port 9000
+```
 
-## Roadmap — Phase 2+
+Frontend:
 
-- [ ] Transit predictions (live planetary movements)
-- [ ] Synastry (compatibility between two charts)
-- [ ] PDF report export
-- [ ] User auth (Clerk / Supabase Auth)
-- [ ] Stripe payments + credit system
-- [ ] Multi-language support (Hindi, Tamil, Chinese)
-- [ ] Celery async breaking generation
-- [ ] Self-hosted Swiss Ephemeris fallback
+```bash
+cd frontend
+npm ci
+set BACKEND_API_URL=http://localhost:9000
+npm run dev
+```
 
-## License
+On macOS/Linux, use `export BACKEND_API_URL=http://localhost:9000`.
 
-MIT
+## Checks
+
+```bash
+cd backend
+pytest -q
+
+cd ../frontend
+npm test
+npm run lint
+npm run typecheck
+npm run build
+```
+
+## API
+
+The browser uses same-origin Next.js `/api/*` routes. FastAPI exposes the private versioned API under `/api/v1`:
+
+- `POST /sessions`
+- `GET /locations`
+- `POST|GET /charts`
+- `GET|DELETE /charts/{id}`
+- `POST /charts/{id}/generation`
+- `GET /charts/{id}/generation/stream`
+- `POST /charts/{id}/chat`
+- `GET /charts/{id}/conversations`
+- `GET /conversations/{id}`
+
+Generation and chat streams use newline-delimited JSON. All non-health routes except session creation require the anonymous bearer token.
+
+## Deployment
+
+`render.yaml` deploys the existing two web services and PostgreSQL database. Backend startup applies Alembic migrations before starting Uvicorn. The `0002_private_studio` migration intentionally purges legacy shared-demo data before creating private session-owned tables.
+
+Do not push this overhaul until local tests and browser QA have been approved.
