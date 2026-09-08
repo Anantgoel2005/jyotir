@@ -18,11 +18,11 @@ ENV HOME=/home/user \
 WORKDIR /app
 
 # Install Python deps
-COPY --chown=user:user requirements.txt .
+COPY --chown=user:user backend/requirements.txt requirements.txt
 RUN pip install --no-cache-dir --user -r requirements.txt
 
-# Copy source
-COPY --chown=user:user . .
+# Copy backend source
+COPY --chown=user:user backend/ .
 
 EXPOSE 7860
 

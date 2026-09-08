@@ -1,3 +1,12 @@
+---
+title: Jyotir Backend
+emoji: 🪐
+colorFrom: purple
+colorTo: indigo
+sdk: docker
+app_port: 7860
+---
+
 # Jyotir
 
 Jyotir is a private AI astrology reading studio for Tropical, Vedic, and Bazi charts. The interface is built with Next.js 14; FastAPI calculates charts, persists private anonymous sessions in PostgreSQL, and streams DeepSeek interpretations.
